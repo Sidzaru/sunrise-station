@@ -38,6 +38,7 @@ public sealed class SmartFridgeBoundUserInterface : BoundUserInterface
             return;
         if (args.Function == EngineKeyFunctions.UIRightClick)
             SendPredictedMessage(new SmartFridgeDeleteItemMessage(entry.Entry));
+            return;
         // Sunrise Edit End
         if (args.Function != EngineKeyFunctions.UIClick)
             return;
