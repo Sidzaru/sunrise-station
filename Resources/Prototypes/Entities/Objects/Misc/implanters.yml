@@ -24,7 +24,7 @@
       name: Implant
       ejectOnBreak: true #Sunrise-Edit
       swap: false #Sunrise-Edit
-      locked: True
+      locked: false #Sunrise-Edit
       priority: 0
       whitelist:
         tags:
