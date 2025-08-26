@@ -6,3 +6,4 @@ smart-fridge-component-title = SmartFridge
 smart-fridge-list-item = {$item} [{$amount}]
 smart-fridge-request-generic = All sales final
 smart-fridge-request-chemistry = Request refills from chemistry
+smart-fridge-component-try-delete-entry = Item deleted from list!

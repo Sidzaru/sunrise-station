@@ -39,6 +39,8 @@ public sealed class SmartFridgeSystem : EntitySystem
             sub =>
             {
                 sub.Event<SmartFridgeDispenseItemMessage>(OnDispenseItem);
+                // Sunrise Edit
+                sub.Event<SmartFridgeDeleteItemMessage>(OnDeleteItem);
             });
     }
 
@@ -137,6 +139,36 @@ public sealed class SmartFridgeSystem : EntitySystem
         _audio.PlayPredicted(ent.Comp.SoundDeny, ent, args.Actor);
         _popup.PopupPredicted(Loc.GetString("smart-fridge-component-try-eject-out-of-stock"), ent, args.Actor);
     }
+
+    // Sunrise Edit
+    private void OnDeleteItem(Entity<SmartFridgeComponent> ent, ref SmartFridgeDeleteItemMessage args)
+    {
+        if (!_timing.IsFirstTimePredicted)
+            return;
+
+        if (!Allowed(ent, args.Actor))
+            return;
+
+        if (!ent.Comp.ContainedEntries.TryGetValue(args.Entry, out var contained))
+        {
+            _audio.PlayPredicted(ent.Comp.SoundDeny, ent, args.Actor);
+            _popup.PopupPredicted(Loc.GetString("smart-fridge-component-try-eject-unknown-entry"), ent, args.Actor);
+            return;
+        }
+
+        if (contained.Count == 0)
+        {
+            ent.Comp.ContainedEntries.Remove(args.Entry);
+            ent.Comp.Entries.Remove(args.Entry);
+
+            _audio.PlayPredicted(ent.Comp.SoundDeny, ent, args.Actor);
+            _popup.PopupPredicted(Loc.GetString("smart-fridge-component-try-delete-entry"), ent, args.Actor);
+            Dirty(ent);
+            return;
+        }
+        return;
+    }
+    // Sunrise Edit End
 
     private void OnGetAltVerb(Entity<SmartFridgeComponent> ent, ref GetVerbsEvent<AlternativeVerb> args)
     {

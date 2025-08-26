@@ -97,3 +97,10 @@ public sealed class SmartFridgeDispenseItemMessage(SmartFridgeEntry entry) : Bou
 {
     public SmartFridgeEntry Entry = entry;
 }
+
+// Sunrise Edit
+[Serializable, NetSerializable]
+public sealed class SmartFridgeDeleteItemMessage(SmartFridgeEntry entry) : BoundUserInterfaceMessage
+{
+    public SmartFridgeEntry Entry = entry;
+}

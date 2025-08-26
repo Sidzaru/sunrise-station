@@ -24,7 +24,7 @@ public sealed class SmartFridgeBoundUserInterface : BoundUserInterface
 
     public void Refresh()
     {
-        if (_menu is not {} menu || !EntMan.TryGetComponent(Owner, out SmartFridgeComponent? fridge))
+        if (_menu is not { } menu || !EntMan.TryGetComponent(Owner, out SmartFridgeComponent? fridge))
             return;
 
         menu.SetFlavorText(Loc.GetString(fridge.FlavorText));
@@ -33,10 +33,13 @@ public sealed class SmartFridgeBoundUserInterface : BoundUserInterface
 
     private void OnItemSelected(GUIBoundKeyEventArgs args, ListData data)
     {
-        if (args.Function != EngineKeyFunctions.UIClick)
-            return;
-
+        // Sunrise Edit
         if (data is not SmartFridgeListData entry)
+            return;
+        if (args.Function == EngineKeyFunctions.UIRightClick)
+            SendPredictedMessage(new SmartFridgeDeleteItemMessage(entry.Entry));
+        // Sunrise Edit End
+        if (args.Function != EngineKeyFunctions.UIClick)
             return;
         SendPredictedMessage(new SmartFridgeDispenseItemMessage(entry.Entry));
     }
