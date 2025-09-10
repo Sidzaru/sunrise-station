@@ -1,0 +1,21 @@
+- type: entity
+  parent: BaseAction
+  id: PsychologistAlcoholBlock
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    useDelay: 5
+    priority: 2
+    itemIconStyle: NoItem
+  - type: TargetAction
+    range: 2
+    checkCanAccess: true
+    requiresTarget: true
+  - type: AutoRecharge
+    rechargeDuration: 120
+  - type: EntityTargetAction
+    canTargetSelf: false
+    whitelist:
+      components:
+      - HumanoidAppearance
+    event: !type:AlcoholBlockEvent
