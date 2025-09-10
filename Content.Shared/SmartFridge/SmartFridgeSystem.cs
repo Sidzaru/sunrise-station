@@ -134,11 +134,13 @@ public sealed class SmartFridgeSystem : EntitySystem
             return;
         }
 
-        ent.Comp.ContainedEntries.Remove(args.Entry);
-        ent.Comp.Entries.Remove(args.Entry);
+        if (contained.Count == 0)
+        {
+            ent.Comp.ContainedEntries.Remove(args.Entry);
+            ent.Comp.Entries.Remove(args.Entry);
 
-        Dirty(ent);
-
+            Dirty(ent);
+        }
         _audio.PlayPredicted(ent.Comp.SoundDeny, ent, args.Actor);
         _popup.PopupPredicted(Loc.GetString("smart-fridge-component-try-eject-out-of-stock"), ent, args.Actor);
     }
