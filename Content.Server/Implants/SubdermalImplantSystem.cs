@@ -57,7 +57,7 @@ public sealed class SubdermalImplantSystem : SharedSubdermalImplantSystem
         if (component.ImplantedEntity is not { } ent)
             return;
 
-        if (HasComp<ZombieComponent>(uid))
+        if (HasComp<ZombieComponent>(ent))
             return;
 
         var polymorph = _polymorphSystem.PolymorphEntity(ent, "RampagingGorilla");
