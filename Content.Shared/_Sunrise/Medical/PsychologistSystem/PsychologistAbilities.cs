@@ -5,6 +5,7 @@ using Robust.Shared.Prototypes;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.EntityEffects.Effects;
 using Content.Shared.Popups;
+using Content.Shared.Actions;
 
 namespace Content.Shared._Sunrise.Medical.PsychologistSystem;
 
@@ -16,9 +17,12 @@ public sealed partial class PsychologistSystem : EntitySystem
 
     [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
 
+    [Dependency] private readonly SharedActionsSystem _actionsSystem  = default!;
+
     public override void Initialize()
     {
         base.Initialize();
+        SubscribeLocalEvent<PsychologistBlockAlcoholComponent, ComponentStartup>(onPsychologistBlockAlcohol);
 
         SubscribeLocalEvent<HumanoidAppearanceComponent, AlcoholBlockEvent>(OnAlcoholBlockTry);
         SubscribeLocalEvent<HumanoidAppearanceComponent, DoAfterAlcoholBlockEvent>(DoAfterAlcoholBlock);
@@ -102,6 +106,10 @@ public sealed partial class PsychologistSystem : EntitySystem
         {
             return;
         }
-
     }
+    private void onPsychologistBlockAlcohol(Entity<PsychologistBlockAlcoholComponent> ent, ref ComponentStartup args)
+    {
+        _actionsSystem.AddAction(ent.Owner, "PsychologistAlcoholBlock");
+    }
+
 }

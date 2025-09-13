@@ -7,3 +7,7 @@ public sealed partial class BlockAlcoholComponent : Component
 {
 }
 
+[RegisterComponent]
+public sealed partial class PsychologistBlockAlcoholComponent : Component
+{
+}
