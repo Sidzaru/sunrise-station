@@ -32,6 +32,8 @@ public sealed partial class PsychologistSystem : EntitySystem
 
     private void DoAfterAlcoholBlock(Entity<HumanoidAppearanceComponent> ent, ref DoAfterAlcoholBlockEvent args)
     {
+        if (args.Handled || args.Cancelled)
+            return;
         if (args.Target != null)
         {
             if (CompOrNull<BlockAlcoholComponent>(args.Target) != null)
