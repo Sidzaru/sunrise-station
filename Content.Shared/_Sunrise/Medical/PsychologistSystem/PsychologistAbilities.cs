@@ -6,6 +6,7 @@ using Content.Shared.Chemistry.Reagent;
 using Content.Shared.EntityEffects.Effects;
 using Content.Shared.Popups;
 using Content.Shared.Actions;
+using Robust.Shared.Localization;
 
 namespace Content.Shared._Sunrise.Medical.PsychologistSystem;
 
@@ -38,10 +39,12 @@ public sealed partial class PsychologistSystem : EntitySystem
         {
             if (CompOrNull<BlockAlcoholComponent>(args.Target) != null)
             {
+                _popupSystem.PopupEntity(Loc.GetString("psychologist-alcoholblock-applied "), args.Target.Value);
                 RemComp<BlockAlcoholComponent>(args.Target.Value);
             }
             else
             {
+                _popupSystem.PopupEntity(Loc.GetString("psychologist-alcoholblock-removed "), args.Target.Value);
                 AddComp<BlockAlcoholComponent>(args.Target.Value);
             }
         }
@@ -53,15 +56,15 @@ public sealed partial class PsychologistSystem : EntitySystem
         {
             if (humanoidAppearanceComponent != null)
             {
-                if ($"{humanoidAppearanceComponent.Species.Id}" == "Dwarf")
+                if (humanoidAppearanceComponent.Species.Id == "Dwarf")
                 {
-                    _popupSystem.PopupEntity("You cant encode Dwarf", ent.Owner);
+                    _popupSystem.PopupEntity(Loc.GetString("psychologist-alcoholblock-dwarf-forbidden"), ent.Owner);
                     return;
                 }
             }
         }
 
-        if (_doAfterSystem.TryStartDoAfter(new DoAfterArgs(EntityManager, ent.Owner, args.Action.Comp.UseDelay ?? TimeSpan.FromSeconds(10),
+        if (_doAfterSystem.TryStartDoAfter(new DoAfterArgs(EntityManager, ent.Owner, args.Action.Comp.UseDelay ?? TimeSpan.FromSeconds(30),
             new DoAfterAlcoholBlockEvent(), eventTarget: args.Target, target: args.Target, used: args.Target)
         {
             BreakOnMove = true,
@@ -82,6 +85,11 @@ public sealed partial class PsychologistSystem : EntitySystem
         {
             foreach (var cont in args.Solution.Contents)
             {
+                if (cont.Reagent.ToString() == "Ethanol")
+                {
+                    args.Cancelled = true;
+                    return;
+                }
                 var reagent = _prototypeManager.Index<ReagentPrototype>($"{cont.Reagent}");
 
                 if (reagent.Metabolisms != null)

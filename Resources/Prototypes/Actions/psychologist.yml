@@ -2,7 +2,7 @@
   parent: BaseAction
   id: PsychologistAlcoholBlock
   name: Alcohol coding
-  description: "Encode a person by convincing them of the evils of alcohol. Сooldown: 60 Seconds"
+  description: "Encode a person by convincing them of the evils of alcohol. Cooldown: 60 Seconds"
   categories: [ HideSpawnMenu ]
   components:
   - type: Action

@@ -11,7 +11,5 @@ public sealed partial class AlcoholBlockEvent : EntityTargetActionEvent
 [Serializable, NetSerializable]
 public sealed partial class DoAfterAlcoholBlockEvent : DoAfterEvent
 {
-    [DataField]
-    public TimeSpan? Duration = TimeSpan.Zero;
     public override DoAfterEvent Clone() => this;
 }
