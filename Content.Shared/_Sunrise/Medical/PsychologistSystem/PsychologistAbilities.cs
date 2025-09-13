@@ -39,12 +39,12 @@ public sealed partial class PsychologistSystem : EntitySystem
         {
             if (CompOrNull<BlockAlcoholComponent>(args.Target) != null)
             {
-                _popupSystem.PopupEntity(Loc.GetString("psychologist-alcoholblock-applied "), args.Target.Value);
+                _popupSystem.PopupEntity(Loc.GetString("psychologist-alcoholblock-removed", ("target", args.Target)), ent.Owner);
                 RemComp<BlockAlcoholComponent>(args.Target.Value);
             }
             else
             {
-                _popupSystem.PopupEntity(Loc.GetString("psychologist-alcoholblock-removed "), args.Target.Value);
+                _popupSystem.PopupEntity(Loc.GetString("psychologist-alcoholblock-applied", ("target", args.Target)), ent.Owner);
                 AddComp<BlockAlcoholComponent>(args.Target.Value);
             }
         }
