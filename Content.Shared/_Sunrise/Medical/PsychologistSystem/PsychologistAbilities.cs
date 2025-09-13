@@ -65,7 +65,7 @@ public sealed partial class PsychologistSystem : EntitySystem
         }
 
         if (_doAfterSystem.TryStartDoAfter(new DoAfterArgs(EntityManager, ent.Owner, args.Action.Comp.UseDelay ?? TimeSpan.FromSeconds(30),
-            new DoAfterAlcoholBlockEvent(), eventTarget: args.Target, target: args.Target, used: args.Target)
+            new DoAfterAlcoholBlockEvent(), eventTarget: args.Target, target: args.Target, used: ent.Owner)
         {
             BreakOnMove = true,
             BreakOnDamage = true
