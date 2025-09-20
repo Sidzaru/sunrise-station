@@ -28,7 +28,7 @@ public sealed partial class PsychologistSystem : EntitySystem
         SubscribeLocalEvent<HumanoidAppearanceComponent, AlcoholBlockEvent>(OnAlcoholBlockTry);
         SubscribeLocalEvent<HumanoidAppearanceComponent, DoAfterAlcoholBlockEvent>(DoAfterAlcoholBlock);
 
-        SubscribeLocalEvent<BlockAlcoholComponent, BeforeIngestedEvent>(OnDrink);
+        SubscribeLocalEvent<SolutionIngestBlockerComponent, BeforeIngestedEvent>(OnDrink);
     }
 
     private void DoAfterAlcoholBlock(Entity<HumanoidAppearanceComponent> ent, ref DoAfterAlcoholBlockEvent args)
@@ -37,15 +37,15 @@ public sealed partial class PsychologistSystem : EntitySystem
             return;
         if (args.Target != null)
         {
-            if (CompOrNull<BlockAlcoholComponent>(args.Target) != null)
+            if (CompOrNull<SolutionIngestBlockerComponent>(args.Target) != null)
             {
                 _popupSystem.PopupEntity(Loc.GetString("psychologist-alcoholblock-removed", ("target", args.Target)), ent.Owner);
-                RemComp<BlockAlcoholComponent>(args.Target.Value);
+                RemComp<SolutionIngestBlockerComponent>(args.Target.Value);
             }
             else
             {
                 _popupSystem.PopupEntity(Loc.GetString("psychologist-alcoholblock-applied", ("target", args.Target)), ent.Owner);
-                AddComp<BlockAlcoholComponent>(args.Target.Value);
+                AddComp<SolutionIngestBlockerComponent>(args.Target.Value);
             }
         }
     }
@@ -79,13 +79,13 @@ public sealed partial class PsychologistSystem : EntitySystem
         }
 
     }
-    private void OnDrink(Entity<BlockAlcoholComponent> ent, ref BeforeIngestedEvent args)
+    private void OnDrink(Entity<SolutionIngestBlockerComponent> ent, ref BeforeIngestedEvent args)
     {
         if (args.Solution != null)
         {
             foreach (var cont in args.Solution.Contents)
             {
-                if (cont.Reagent.ToString() == "Ethanol")
+                if (cont.Reagent.ToString() == ent.Comp.ReagentForBlock)
                 {
                     args.Cancelled = true;
                     return;
@@ -98,7 +98,7 @@ public sealed partial class PsychologistSystem : EntitySystem
                     {
                         foreach (var effect in metabolism.Value.Effects)
                         {
-                            if (effect is AdjustReagent adjust && adjust.Reagent == "Ethanol")
+                            if (effect is AdjustReagent adjust && adjust.Reagent != null && adjust.Reagent == ent.Comp.ReagentForBlock)
                             {
                                 args.Cancelled = true;
                                 return;
